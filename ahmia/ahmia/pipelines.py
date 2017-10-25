@@ -92,6 +92,7 @@ class CustomElasticSearchPipeline(ElasticSearchPipeline):
         if isinstance(item, DocumentItem):
             index_action = {
                 '_index': index_name,
+                'pipeline': 'opennlp-pipeline', #bsn
                 '_type': self.settings['ELASTICSEARCH_TYPE'],
                 '_id': hashlib.sha1(item['url']).hexdigest(),
                 '_source': dict(item)
@@ -141,6 +142,6 @@ class CustomElasticSearchPipeline(ElasticSearchPipeline):
         self.items_buffer.append(index_action)
 
         if len(self.items_buffer) >= \
-          self.settings.get('ELASTICSEARCH_BUFFER_LENGTH', 500):
+          self.settings.get('ELASTICSEARCH_BUFFER_LENGTH', 250): #bsn
             self.send_items()
             self.items_buffer = []
